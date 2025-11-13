@@ -13,9 +13,14 @@ import axios from 'axios';
 
 // --- 1. TẠO AXIOS INSTANCE ---
 
+// Lấy URL gốc của Backend từ biến môi trường
+// Vercel sẽ cung cấp biến này, còn ở local, nó sẽ là undefined
+const API_URL = process.env.REACT_APP_API_URL;
+
 const apiClient = axios.create({
-  // Cấu hình URL gốc cho tất cả các API
-  baseURL: 'http://localhost:8000/api' 
+  // Nếu API_URL (trên Vercel) tồn tại, dùng nó.
+  // Nếu không (đang chạy local), dùng 'http://localhost:8000'
+  baseURL: API_URL ? `${API_URL}/api` : 'http://localhost:8000/api'
 });
 
 // --- 2. THIẾT LẬP REQUEST INTERCEPTOR (GỬI ĐI) ---
