@@ -86,7 +86,7 @@ const DangKyPage = () => {
         />
       )}
       
-      <h2>Ghi Danh Học Viên Vào Khóa Học</h2>
+      <h2>Đăng Ký Học Viên Vào Khóa Học</h2>
       
       <form onSubmit={handleSubmit} className="form-container">
         
@@ -124,7 +124,7 @@ const DangKyPage = () => {
           </select>
         </div>
 
-        <button type="submit" className="form-button">Ghi danh</button>
+        <button type="submit" className="form-button">Đăng ký</button>
       </form>
     </div>
   );

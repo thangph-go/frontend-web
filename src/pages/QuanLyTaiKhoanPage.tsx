@@ -62,7 +62,7 @@ const QuanLyTaiKhoanPage = () => {
           <tr>
             <th>ID</th>
             <th>Tên Đăng Nhập</th>
-            <th>Vai Trò (Role)</th>
+            <th>Vai Trò</th>
           </tr>
         </thead>
         <tbody>

@@ -310,7 +310,7 @@ const HocVienPage = () => {
       )}
 
       {/* Danh sách Học Viên (Bảng) */}
-      <hr style={{border: 'none', borderTop: '1px solid #eee', margin: '20px 0'}} />
+      <hr style={{border: 'none', borderTop: '2px solid #888888', margin: '20px 0'}} />
       <h3>Danh sách học viên</h3>
 
       <table className="styled-table">
