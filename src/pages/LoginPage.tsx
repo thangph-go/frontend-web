@@ -36,8 +36,13 @@ const LoginPage = () => {
       
       navigate('/admin/dashboard'); 
 
-    } catch (err: any) {
-      setError(err.message);
+    }catch (err: any) {
+  setError(err.message);
+
+  // Giữ thông báo lỗi 4 giây rồi mới tắt
+  setTimeout(() => {
+    setError(null);
+  }, 4000);
     } finally {
       setLoading(false);
     }
