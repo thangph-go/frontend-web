@@ -9,6 +9,13 @@ export interface TaiKhoan {
   vai_tro: 'ADMIN' | 'STAFF';
 }
 
+export interface CreateStaffDTO {
+  ten_dang_nhap: string;
+  mat_khau: string;
+  // Các trường khác không cần gửi lên nữa
+}
+
+
 // 2. Hàm gọi API GET /api/taikhoan
 // (API này đã được bảo vệ bởi authMiddleware + adminMiddleware)
 export const getAllAccounts = async () => {
@@ -23,5 +30,16 @@ export const getAllAccounts = async () => {
     } else {
       throw new Error('Không thể kết nối đến máy chủ.');
     }
+  }
+};
+
+
+// [MỚI] Hàm gọi API tạo Staff
+export const createStaffAccount = async (data: CreateStaffDTO) => {
+  try {
+    const response = await apiClient.post('/taikhoan/staff', data);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.error || 'Lỗi khi tạo tài khoản');
   }
 };

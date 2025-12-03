@@ -1,0 +1,188 @@
+/* File: src/components/layout/AdminLayout.css */
+ul {
+  list-style-type: none;
+}
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #2c3e50;
+  color: #ffffff;
+  padding: 20px;
+}
+
+.sidebar-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.sidebar-nav {
+  padding: 5px;
+  margin: 5px;
+}
+
+.sidebar-nav li {
+  margin-bottom: 5px;
+}
+
+.sidebar-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-nav a i {
+  margin-right: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.sidebar-nav a:hover {
+  background-color: #34495e;
+}
+
+.main-content {
+  flex-grow: 1;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: #ffffff;
+  padding: 20px;
+  border-bottom: 2px solid #CCCCCC;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logout-button {
+  background-color: #e74c3c;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.welcome-message {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.header button {
+  background-color: #e74c3c;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.page-content {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.sidebar-nav a.active {
+  background-color: #009879;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.sidebar-nav a.active:hover {
+  background-color: #007a63;
+}
+
+
+
+/* --- CSS CHO MENU SỔ XUỐNG --- */
+
+/* Style cho nút cha (Báo cáo thống kê) */
+.sidebar-dropdown-toggle {
+  display: flex;
+  justify-content: space-between; /* Đẩy mũi tên sang phải cùng */
+  align-items: center;
+  padding: 10px 15px;
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+
+/* --- CSS CHO MENU CHA ACTIVE --- */
+.sidebar-dropdown-toggle.active {
+  background-color: #009879; /* giống NavLink.active */
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Hover khi menu cha active */
+.sidebar-dropdown-toggle.active:hover {
+  background-color: #007a63; /* giống NavLink.active:hover */
+  color: #ffffff;
+}
+
+/* Hover khi menu cha chưa active */
+.sidebar-dropdown-toggle:hover {
+  background-color: #34495e;
+  color: #ffffff;
+}
+
+
+/* Icon bên trái chữ */
+.sidebar-dropdown-toggle .fas.fa-chart-pie {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Mũi tên bên phải */
+.sidebar-dropdown-toggle .arrow {
+  font-size: 0.8em;
+  transition: transform 0.3s ease; /* Hiệu ứng xoay mượt */
+}
+
+/* Class để xoay mũi tên khi mở */
+.sidebar-dropdown-toggle .arrow.rotate {
+  transform: rotate(90deg);
+}
+
+/* --- Style cho Menu con --- */
+.sidebar-submenu {
+  margin: 0;
+  padding: 0;
+  background-color: #233342;
+  animation: slideDown 0.3s ease-in-out;
+}
+
+.sidebar-submenu li a {
+  padding: 12px 20px 12px 45px ;
+  margin-top: 5px;
+  font-size: 0.9em;
+  color: #ffffff;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

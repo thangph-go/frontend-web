@@ -11,12 +11,12 @@ interface NotificationProps {
 
 const Notification: React.FC<NotificationProps> = ({ message, type, onClose }) => {
   
-  // 2. Tự động đóng sau 3 giây
+  // 2. Tự động đóng sau 5 giây
   useEffect(() => {
     // Tạo một bộ đếm thời gian
     const timer = setTimeout(() => {
       onClose(); // Gọi hàm onClose
-    }, 3000); // 3000 mili-giây = 3 giây
+    }, 5000); // 5000 mili-giây = 5 giây
 
     // Dọn dẹp: Hủy bộ đếm nếu component bị gỡ (unmount)
     return () => clearTimeout(timer);

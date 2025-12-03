@@ -23,8 +23,14 @@ import KhoaHocPage from './pages/KhoaHocPage';
 import KhoaHocDetailPage from './pages/KhoaHocDetailPage';
 import DangKyPage from './pages/DangKyPage';
 import CapNhatKetQuaPage from './pages/CapNhatKetQuaPage';
-import ThongKePage from './pages/ThongKePage';
+// import ThongKePage from './pages/ThongKePage';
 import QuanLyTaiKhoanPage from './pages/QuanLyTaiKhoanPage';
+
+import ThongKeQueQuanPage from './pages/ThongKeQueQuanPage';
+import ThongKeThuongTruPage from './pages/ThongKeThuongTruPage';
+import ThongKeKhoaHocPage from './pages/ThongKeKhoaHocPage';
+
+
 
 function App() {
   return (
@@ -68,7 +74,13 @@ function App() {
             <Route path="ketqua" element={<CapNhatKetQuaPage />} />
             
             {/* Module Báo Cáo & Quản Trị */}
-            <Route path="thongke" element={<ThongKePage />} />
+            {/* <Route path="thongke" element={<ThongKePage />} /> */}
+
+            {/* 3. THÊM 3 ROUTE MỚI */}
+            <Route path="thongke/que-quan" element={<ThongKeQueQuanPage />} />
+            <Route path="thongke/thuong-tru" element={<ThongKeThuongTruPage />} />
+            <Route path="thongke/khoa-hoc" element={<ThongKeKhoaHocPage />} />
+
             <Route path="taikhoan" element={<QuanLyTaiKhoanPage />} />
 
             {/* * Route Mặc Định (Index)

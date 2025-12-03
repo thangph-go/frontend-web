@@ -18,7 +18,7 @@
 .form-label {
   font-weight: bold;
   display: block;
-  margin-top: 10px;
+  margin: 10px 0;
 }
 
 /* Định dạng cho các nút bấm (button) */

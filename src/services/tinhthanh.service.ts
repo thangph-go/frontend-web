@@ -10,7 +10,6 @@ export interface TinhThanh {
 // 2. Hàm gọi API GET /api/tinhthanh
 export const getAllTinhThanh = async () => {
   try {
-    // Interceptor sẽ tự động gắn Token (mặc dù API này không cần)
     const response = await apiClient.get<TinhThanh[]>('/tinhthanh');
     return response.data;
   } catch (error: any) {

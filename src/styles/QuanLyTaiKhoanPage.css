@@ -1,0 +1,107 @@
+/* Container */
+.qltk-container {
+  padding: 20px;
+}
+
+/* Title */
+.qltk-title {
+  color: #2c3e50;
+  border-left: 5px solid #3498db;
+  padding-left: 10px;
+}
+
+/* Header area */
+.qltk-header {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.qltk-subtitle {
+  margin: 0;
+}
+
+/* Divider */
+.qltk-divider {
+  border-top: 2px solid #dddddd;
+  margin-bottom: 20px;
+}
+
+/* Add button */
+.qltk-add-btn {
+  background-color: #27ae60 !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Center cell */
+.qltk-center {
+  text-align: center;
+  padding: 20px;
+}
+
+/* Modal */
+.qltk-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.qltk-modal {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 95%;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  animation: fadeIn 0.2s ease;
+}
+
+/* Header of modal */
+.qltk-modal-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 5px;
+}
+
+.qltk-close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999999;
+}
+
+/* Form */
+.qltk-form {
+  display: grid;
+  gap: 15px;
+}
+
+/* Footer */
+.qltk-form-footer {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.qltk-confirm-btn {
+  background-color: #3498db ;
+  min-width: 120px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

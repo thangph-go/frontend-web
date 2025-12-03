@@ -1,29 +1,36 @@
-/*
- * File: dangky.service.ts
- * Nhiệm vụ:
- * 1. Cung cấp các hàm để "nói chuyện" với API Nghiệp vụ Đăng Ký (/api/dangky) của Backend.
- * 2. Gói gọn logic gọi API (sử dụng apiClient đã cấu hình) và xử lý lỗi.
- */
-
+// File: src/services/dangky.service.ts
 import apiClient from './api';
 
-// --- 1. ĐỊNH NGHĨA CÁC KIỂU DỮ LIỆU (TYPES/INTERFACES) ---
+// ==========================================
+// 1. CÁC INTERFACE (KIỂU DỮ LIỆU)
+// ==========================================
 
 /**
- * Interface (Kiểu) cho dữ liệu trả về của API
- * lấy danh sách học viên trong 1 khóa học.
- * (API: GET /api/dangky/khoahoc/:ma_kh)
+ * Interface cho thông tin học viên trong danh sách đăng ký
+ * (Dùng cho trang Cấp chứng chỉ)
  */
 export interface EnrollmentInfo {
   ma_hoc_vien: string;
   ho_ten: string;
-  ket_qua: 'DAT' | 'KHONG DAT' | 'CHUA CAP NHAT';
+  ket_qua: 'ĐẠT' | 'KHÔNG ĐẠT' | 'CHƯA CẬP NHẬT';
+  ngay_dang_ky?: string; // Có thể bổ sung thêm nếu cần hiển thị
+}
+
+
+// Interface cho Lịch sử khóa học của học viên
+export interface StudentCourseHistory {
+  ma_khoa_hoc: string;
+  ten_khoa: string;
+  thoi_gian_bat_dau: string;
+  thoi_gian_ket_thuc: string | null;
+  ngay_dang_ky: string;
+  ket_qua: 'ĐẠT' | 'KHÔNG ĐẠT' | 'CHƯA CẬP NHẬT';
+  so_bai_da_hoan_thanh: number;
+  tong_so_bai: number;
 }
 
 /**
- * Type (Kiểu) cho dữ liệu gửi đi (req.body)
- * khi GHI DANH một học viên.
- * (API: POST /api/dangky)
+ * Dữ liệu gửi đi khi GHI DANH (Đăng ký mới)
  */
 type RegisterDTO = {
   ma_hoc_vien: string;
@@ -31,33 +38,30 @@ type RegisterDTO = {
 };
 
 /**
- * Type (Kiểu) cho dữ liệu gửi đi (req.body)
- * khi CẬP NHẬT KẾT QUẢ.
- * (API: PUT /api/dangky)
+ * Dữ liệu gửi đi khi CẬP NHẬT KẾT QUẢ (Cấp chứng chỉ)
  */
 type UpdateResultDTO = {
   ma_hoc_vien: string;
   ma_khoa_hoc: string;
-  ket_qua: 'DAT' | 'KHONG DAT' | 'CHUA CAP NHAT';
+  ket_qua: 'ĐẠT' | 'KHÔNG ĐẠT' | 'CHƯA CẬP NHẬT';
 };
 
-
-// --- 2. CÁC HÀM GỌI API (Đã được bảo vệ bởi Token) ---
+// ==========================================
+// 2. CÁC HÀM GỌI API NGHIỆP VỤ ĐĂNG KÝ
+// ==========================================
 
 /**
+ * Ghi danh học viên vào khóa học
  * API: POST /api/dangky
- * Mục đích: Ghi danh một học viên mới vào khóa học (FR3).
- * @param data Dữ liệu gồm { ma_hoc_vien, ma_khoa_hoc }
  */
 export const registerStudentToCourse = async (data: RegisterDTO) => {
   try {
     const response = await apiClient.post('/dangky', data);
     return response.data;
   } catch (error: any) {
-    // Xử lý lỗi (Interceptor trong api.ts sẽ tự xử lý lỗi 401)
     if (error.response) {
-      // Ném lỗi từ Backend (ví dụ: "Học viên đã đăng ký khóa này rồi")
-      throw new Error(error.response.data.error || 'Lỗi khi đăng ký');
+      // Trả về lỗi cụ thể từ Backend (ví dụ: "Học viên đã đăng ký rồi")
+      throw new Error(error.response.data.error || 'Lỗi khi đăng ký khóa học');
     } else {
       throw new Error('Không thể kết nối đến máy chủ.');
     }
@@ -65,38 +69,54 @@ export const registerStudentToCourse = async (data: RegisterDTO) => {
 };
 
 /**
+ * Cập nhật kết quả cuối khóa (ĐẠT / KHÔNG ĐẠT)
  * API: PUT /api/dangky
- * Mục đích: Cập nhật kết quả (Đạt/Không Đạt) cho một lượt đăng ký (FR3).
- * @param data Dữ liệu gồm { ma_hoc_vien, ma_khoa_hoc, ket_qua }
  */
 export const updateEnrollmentResult = async (data: UpdateResultDTO) => {
-    try {
-      const response = await apiClient.put('/dangky', data);
-      return response.data;
-    } catch (error: any) {
-      if (error.response) {
-        throw new Error(error.response.data.error || 'Lỗi khi cập nhật kết quả');
-      } else {
-        throw new Error('Không thể kết nối đến máy chủ.');
-      }
-    }
-  };
-
-/**
- * API: GET /api/dangky/khoahoc/:ma_kh
- * Mục đích: Lấy danh sách học viên (và kết quả) của MỘT khóa học.
- * (Dùng cho trang Cập nhật Kết quả).
- * @param ma_kh Mã khóa học (từ URL)
- */
-export const getEnrollmentsByCourse = async (ma_kh: string) => {
   try {
-    const response = await apiClient.get<EnrollmentInfo[]>(`/dangky/khoahoc/${ma_kh}`);
+    const response = await apiClient.put('/dangky', data);
     return response.data;
   } catch (error: any) {
     if (error.response) {
-      throw new Error(error.response.data.error || 'Lỗi khi tải danh sách đăng ký');
+      throw new Error(error.response.data.error || 'Lỗi khi cập nhật kết quả');
     } else {
       throw new Error('Không thể kết nối đến máy chủ.');
     }
+  }
+};
+
+/**
+ * Lấy danh sách học viên ĐỦ ĐIỀU KIỆN cấp chứng chỉ
+ * (Backend đã lọc: chỉ trả về học viên hoàn thành 100% bài học)
+ * API: GET /api/dangky/khoahoc/:ma_kh
+ */// 1. Hàm lấy TẤT CẢ (Dùng cho KhoaHocDetailPage.tsx)
+export const getEnrollmentsByCourse = async (ma_kh: string) => {
+  try {
+    // Gọi route cũ /khoahoc/:ma_kh -> Backend trả về tất cả
+    const response = await apiClient.get<EnrollmentInfo[]>(`/dangky/khoahoc/${ma_kh}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.error || 'Lỗi tải danh sách');
+  }
+};
+
+// 2. Hàm lấy ĐỦ ĐIỀU KIỆN (Dùng cho CapNhatKetQuaPage.tsx)
+export const getEligibleStudents = async (ma_kh: string) => {
+  try {
+    // Gọi route mới /du-dieu-kien/:ma_kh
+    const response = await apiClient.get<EnrollmentInfo[]>(`/dangky/du-dieu-kien/${ma_kh}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.error || 'Lỗi tải danh sách đủ điều kiện');
+  }
+};
+
+// (MỚI) Lấy danh sách khóa học đã đăng ký của 1 học viên
+export const getCoursesByStudent = async (ma_hv: string) => {
+  try {
+    const response = await apiClient.get<StudentCourseHistory[]>(`/dangky/hocvien/${ma_hv}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.error || 'Lỗi khi tải lịch sử học tập');
   }
 };

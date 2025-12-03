@@ -1,0 +1,81 @@
+/* Overlay mờ */
+.student-progress-overlay {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Khung modal */
+.student-progress-modal {
+  background-color: white;
+  border-radius: 8px;
+  width: 700px;
+  max-width: 90%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: fadeIn 0.2s;
+  position: relative;
+}
+
+.student-progress-body {
+  padding: 5px 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;          
+}
+
+/* Header */
+.student-progress-header {
+  padding: 10px 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-progress-text {
+    margin-bottom: 15px;
+    background: rgb(176,224,230);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.student-progress-close-btn {
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: #999;
+}
+
+/* Danh sách nội dung */
+.student-progress-list {
+  max-height: 400px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+
+/* Footer */
+.student-progress-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Hiệu ứng fade */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

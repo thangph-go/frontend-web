@@ -1,16 +1,9 @@
-/*
- * File: HocVienPage.tsx
- * Nhiệm vụ:
- * 1. Hiển thị danh sách học viên (có phân trang, tìm kiếm).
- * 2. Xử lý logic Thêm, Sửa, Xóa (mềm) học viên.
- * 3. Hiển thị Form, Tải danh sách tỉnh thành cho dropdown.
- */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
 import '../styles/forms.css';
 import '../styles/tables.css';
 
-// Import Services
 import { 
   getAllHocVien, 
   createHocVien, 
@@ -20,11 +13,7 @@ import {
   HocVien 
 } from '../services/hocvien.service';
 import { getAllTinhThanh, TinhThanh } from '../services/tinhthanh.service';
-
-// Import Components
-import Notification from '../components/common/Notification';
-
-// --- ĐỊNH NGHĨA CÁC KIỂU DỮ LIỆU ---
+import Notification from '../components/notification/Notification';
 
 type NotificationState = {
   message: string;
@@ -39,6 +28,11 @@ type HocVienFormData = {
   ma_tinh_thuong_tru: string;
 };
 
+type SelectOption = {
+  value: string;
+  label: string;
+};
+
 const initialFormState: HocVienFormData = {
   ma_hoc_vien: '',
   ho_ten: '',
@@ -47,10 +41,8 @@ const initialFormState: HocVienFormData = {
   ma_tinh_thuong_tru: '',
 };
 
-// --- COMPONENT CHÍNH ---
 
 const HocVienPage = () => {
-  // --- STATE ---
   const [hocVienList, setHocVienList] = useState<HocVien[]>([]);
   const [tinhThanhList, setTinhThanhList] = useState<TinhThanh[]>([]);
   
@@ -61,11 +53,8 @@ const HocVienPage = () => {
   const [notification, setNotification] = useState<NotificationState>(null);
   const [searchTerm, setSearchTerm] = useState('');
   
-  // (ĐÃ XÓA state [error, setError] - vì đã có 'notification')
-  
   const navigate = useNavigate();
 
-  // --- HÀM TẢI DỮ LIỆU ---
 
   const loadHocVien = async () => {
     try {
@@ -76,7 +65,6 @@ const HocVienPage = () => {
     }
   };
 
-  // Tải dữ liệu lần đầu (Học viên + Tỉnh thành)
   useEffect(() => {
     const loadTinhThanh = async () => {
       try {
@@ -89,11 +77,15 @@ const HocVienPage = () => {
     
     loadHocVien();
     loadTinhThanh();
-  }, []); // [] = Chạy 1 lần
+  }, []);
 
-  // Xử lý gõ/chọn trên form
+  const tinhThanhOptions: SelectOption[] = tinhThanhList.map(tinh => ({
+    value: tinh.ma_tinh,
+    label: tinh.ten_tinh
+  }));
+
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const { name, value } = e.target;
     setFormData({
@@ -102,20 +94,23 @@ const HocVienPage = () => {
     });
   };
 
-  // --- HÀM XỬ LÝ SỰ KIỆN (CLICK) ---
+  const handleSelectChange = (option: SelectOption | null, name: string) => {
+    setFormData({
+      ...formData,
+      [name]: option ? option.value : ''
+    });
+  };
 
-  // Khi nhấn "Lưu" (Thêm mới hoặc Cập nhật)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setNotification(null); 
 
     try {
       if (editingMaHV) {
-        // Cập nhật (Sửa)
-        await updateHocVien(editingMaHV, formData as HocVienFormData);
+        await updateHocVien(editingMaHV, formData);
         setNotification({ message: 'Cập nhật thành công!', type: 'success' });
       } else {
-        // Tạo mới (Thêm)
         const newData = {
           ho_ten: formData.ho_ten,
           ngay_sinh: formData.ngay_sinh,
@@ -126,40 +121,36 @@ const HocVienPage = () => {
         setNotification({ message: 'Thêm học viên thành công!', type: 'success' });
       }
 
-      // SỬA LỖI LOGIC: Tự dọn dẹp, không gọi handleCancel()
       setShowForm(false);
       setFormData(initialFormState);
       setEditingMaHV(null);
       
-      loadHocVien();  // Tải lại danh sách
+      loadHocVien();
     } catch (err: any) {
       setNotification({ message: err.message, type: 'error' });
     }
   };
 
-  // Khi nhấn "Hủy" trên form
   const handleCancel = () => {
     setShowForm(false);
     setFormData(initialFormState);
     setEditingMaHV(null);
-    setNotification(null); // Nút Hủy thì được phép tắt thông báo
+    setNotification(null);
   };
 
-  // Khi nhấn "Sửa" trên danh sách
   const handleEditClick = (hv: HocVien) => {
     setNotification(null);
     setEditingMaHV(hv.ma_hoc_vien); 
     setFormData({
       ma_hoc_vien: hv.ma_hoc_vien,
       ho_ten: hv.ho_ten,
-      ngay_sinh: (hv.ngay_sinh || '').split('T')[0], // SỬA LỖI LOGIC: Thêm || ''
+      ngay_sinh: (hv.ngay_sinh || '').split('T')[0],
       ma_tinh_que_quan: hv.ma_tinh_que_quan,
       ma_tinh_thuong_tru: hv.ma_tinh_thuong_tru
     });
     setShowForm(true); 
   };
 
-  // Khi nhấn "Xóa" trên danh sách
   const handleDeleteClick = async (ma_hv: string) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa học viên này?')) {
       try {
@@ -173,7 +164,6 @@ const HocVienPage = () => {
     }
   };
 
-  // Khi nhấn "Tìm kiếm"
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setNotification(null);
@@ -203,7 +193,6 @@ const HocVienPage = () => {
       
       <h2>Quản lý Học viên</h2>
 
-      {/* Header trang (Nút Thêm Mới và Thanh Tìm Kiếm) */}
       <div className="page-header">
         {!showForm && (
           <button 
@@ -220,7 +209,7 @@ const HocVienPage = () => {
         <form onSubmit={handleSearch} className="search-form">
           <input
             type="text"
-            placeholder="Tìm theo mã hoặc tên học viên..."
+            placeholder="Tìm theo mã hoặc tên học viên"
             className="form-input search-input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -229,7 +218,6 @@ const HocVienPage = () => {
         </form>
       </div>
 
-      {/* Form Thêm Mới / Cập Nhật */}
       {showForm && (
         <form onSubmit={handleSubmit} className="form-container">
           <h3>{editingMaHV ? 'Cập nhật học viên' : 'Thêm học viên mới'}</h3>
@@ -272,36 +260,30 @@ const HocVienPage = () => {
 
           <div className="form-group">
             <label className="form-label">Quê quán:</label>
-            <select
-              name="ma_tinh_que_quan"
-              className="form-select"
-              value={formData.ma_tinh_que_quan}
-              onChange={handleInputChange}
-            >
-              <option value="">-- Chọn quê quán --</option>
-              {tinhThanhList.map((tinh) => (
-                <option key={tinh.ma_tinh} value={tinh.ma_tinh}>
-                  {tinh.ten_tinh}
-                </option>
-              ))}
-            </select>
+            <Select
+              options={tinhThanhOptions}
+              value={tinhThanhOptions.find(opt => opt.value === formData.ma_tinh_que_quan)}
+              onChange={(opt) => handleSelectChange(opt, 'ma_tinh_que_quan')}
+              placeholder="-- Chọn quê quán --"
+              isClearable
+              isSearchable
+              maxMenuHeight={200}
+              classNamePrefix="select"
+            />
           </div>
-          
+
           <div className="form-group">
             <label className="form-label">Tỉnh thường trú:</label>
-            <select
-              name="ma_tinh_thuong_tru"
-              className="form-select"
-              value={formData.ma_tinh_thuong_tru}
-              onChange={handleInputChange}
-            >
-              <option value="">-- Chọn tỉnh thường trú --</option>
-              {tinhThanhList.map((tinh) => (
-                <option key={tinh.ma_tinh} value={tinh.ma_tinh}>
-                  {tinh.ten_tinh}
-                </option>
-              ))}
-            </select>
+            <Select
+              options={tinhThanhOptions}
+              value={tinhThanhOptions.find(opt => opt.value === formData.ma_tinh_thuong_tru)}
+              onChange={(opt) => handleSelectChange(opt, 'ma_tinh_thuong_tru')}
+              placeholder="-- Chọn tỉnh thường trú --"
+              isClearable
+              isSearchable
+              maxMenuHeight={200}
+              classNamePrefix="select"
+            />
           </div>
 
           <button type="submit" className="form-button">Lưu</button>
@@ -309,7 +291,6 @@ const HocVienPage = () => {
         </form>
       )}
 
-      {/* Danh sách Học Viên (Bảng) */}
       <hr style={{border: 'none', borderTop: '2px solid #888888', margin: '20px 0'}} />
       <h3>Danh sách học viên</h3>
 
@@ -334,7 +315,6 @@ const HocVienPage = () => {
               <tr key={hv.ma_hoc_vien}>
                 <td>{hv.ma_hoc_vien}</td>
                 <td>{hv.ho_ten}</td>
-                {/* SỬA LỖI LOGIC: Thêm kiểm tra '?' */}
                 <td>
                   {hv.ngay_sinh 
                     ? new Date(hv.ngay_sinh).toLocaleDateString('vi-VN', {

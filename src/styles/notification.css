@@ -10,8 +10,6 @@
   color: white;
   font-weight: bold;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  
-  /* Hiệu ứng trượt vào */
   animation: slideIn 0.5s forwards;
   z-index: 1000;
 }

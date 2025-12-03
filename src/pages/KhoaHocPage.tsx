@@ -1,10 +1,8 @@
-// File: src/pages/KhoaHocPage.tsx (Đã Cập Nhật Thông Báo)
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/forms.css';
 import '../styles/tables.css';
 
-// Import các hàm service
 import {
   getAllKhoaHoc,
   createKhoaHoc,
@@ -14,16 +12,13 @@ import {
   KhoaHocFormData,
 } from '../services/khoahoc.service';
 
-// SỬA LỖI 1: Import component giao diện
-import Notification from '../components/common/Notification';
+import Notification from '../components/notification/Notification';
 
-// SỬA LỖI 2: Thêm kiểu State Thông báo
 type NotificationState = {
   message: string;
   type: 'success' | 'error';
 } | null;
 
-// Giá trị ban đầu cho Form
 const initialFormState: KhoaHocFormData = {
   ma_khoa_hoc: '',
   ten_khoa: '',
@@ -32,27 +27,22 @@ const initialFormState: KhoaHocFormData = {
   thoi_gian_ket_thuc: '',
 };
 
-// --- COMPONENT CHÍNH ---
 
 const KhoaHocPage = () => {
-  // --- Các State ---
   const [khoaHocList, setKhoaHocList] = useState<KhoaHoc[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState<KhoaHocFormData>(initialFormState);
   const [editingMaKH, setEditingMaKH] = useState<string | null>(null);
 
-  // SỬA LỖI 3: Thay thế 'error' state bằng 'notification' state
   const [notification, setNotification] = useState<NotificationState>(null);
   
   const navigate = useNavigate();
 
-  // --- Hàm Tải Dữ Liệu ---
   const loadKhoaHoc = async () => {
     try {
       const data = await getAllKhoaHoc();
       setKhoaHocList(data);
     } catch (err: any) {
-      // SỬA LỖI 4: Dùng setNotification
       setNotification({ message: err.message, type: 'error' });
     }
   };
@@ -61,7 +51,6 @@ const KhoaHocPage = () => {
     loadKhoaHoc();
   }, []);
 
-  // --- Hàm Xử Lý Form ---
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -79,7 +68,6 @@ const KhoaHocPage = () => {
     setNotification(null);
   };
 
-  // --- Hàm Xử Lý API ---
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setNotification(null); 
@@ -87,15 +75,13 @@ const KhoaHocPage = () => {
     try {
       if (editingMaKH) {
         await updateKhoaHoc(editingMaKH, formData);
-        // SỬA LỖI 5: Thay alert()
         setNotification({ message: 'Cập nhật khóa học thành công!', type: 'success' });
       } else {
         await createKhoaHoc(formData);
-        // SỬA LỖI 5: Thay alert()
+
         setNotification({ message: 'Thêm khóa học thành công!', type: 'success' });
       }
       
-      // SỬA LỖI 6: Sửa lỗi logic pop-up
       setShowForm(false);
       setFormData(initialFormState);
       setEditingMaKH(null);
@@ -185,7 +171,7 @@ const KhoaHocPage = () => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Nội dung:</label>
+            <label className="form-label">Mô tả sơ lược:</label>
             <textarea
               name="noi_dung"
               className="form-textarea"
@@ -250,7 +236,6 @@ const KhoaHocPage = () => {
               <tr key={kh.ma_khoa_hoc}>
                 <td>{kh.ma_khoa_hoc}</td>
                 <td>{kh.ten_khoa}</td>
-                {/* Cột Bắt Đầu */}
                 <td>
                   {kh.thoi_gian_bat_dau 
                     ? new Date(kh.thoi_gian_bat_dau).toLocaleDateString('vi-VN', {
@@ -258,7 +243,6 @@ const KhoaHocPage = () => {
                       }) 
                     : '(Chưa có)'}
                 </td>
-                {/* Cột Kết Thúc */}
                 <td>
                   {kh.thoi_gian_ket_thuc 
                     ? new Date(kh.thoi_gian_ket_thuc).toLocaleDateString('vi-VN', {

@@ -1,25 +1,24 @@
-// File: src/pages/DangKyPage.tsx
 import React, { useEffect, useState } from 'react';
-
-// Import CSS
+import Select from 'react-select'; //
 import '../styles/forms.css';
 
-// Import các hàm service chúng ta cần
 import { getAllHocVien, HocVien } from '../services/hocvien.service';
 import { getAllKhoaHoc, KhoaHoc } from '../services/khoahoc.service';
 import { registerStudentToCourse } from '../services/dangky.service';
 
-// Import component Thông báo
-import Notification from '../components/common/Notification';
+import Notification from '../components/notification/Notification';
 
-// Kiểu cho State Thông báo
 type NotificationState = {
   message: string;
   type: 'success' | 'error';
 } | null;
 
+type SelectOption = {
+  value: string;
+  label: string;
+};
+
 const DangKyPage = () => {
-  // --- STATE ---
   const [hocVienList, setHocVienList] = useState<HocVien[]>([]);
   const [khoaHocList, setKhoaHocList] = useState<KhoaHoc[]>([]);
 
@@ -28,12 +27,10 @@ const DangKyPage = () => {
 
   const [notification, setNotification] = useState<NotificationState>(null);
 
-  // --- TẢI DỮ LIỆU (cho 2 dropdowns) ---
   useEffect(() => {
     const loadData = async () => {
       try {
         setNotification(null);
-        // Tải song song 2 danh sách
         const [hvData, khData] = await Promise.all([
           getAllHocVien(),
           getAllKhoaHoc()
@@ -46,9 +43,18 @@ const DangKyPage = () => {
       }
     };
     loadData();
-  }, []); // [] = Chạy 1 lần
+  }, []);
 
-  // --- XỬ LÝ SUBMIT (GHI DANH) ---
+  const hocVienOptions: SelectOption[] = hocVienList.map(hv => ({
+    value: hv.ma_hoc_vien,
+    label: `${hv.ho_ten} (${hv.ma_hoc_vien})`
+  }));
+
+  const khoaHocOptions: SelectOption[] = khoaHocList.map(kh => ({
+    value: kh.ma_khoa_hoc,
+    label: `${kh.ten_khoa} (${kh.ma_khoa_hoc})`
+  }));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setNotification(null); 
@@ -65,17 +71,15 @@ const DangKyPage = () => {
       };
       await registerStudentToCourse(data); 
 
-      // Thông báo thành công và reset form
       setNotification({ message: 'Ghi danh học viên thành công!', type: 'success' });
+      
       setSelectedHocVien('');
       setSelectedKhoaHoc('');
     } catch (err: any) {
-      // Hiển thị lỗi (vd: "Học viên đã đăng ký khóa này rồi")
       setNotification({ message: err.message, type: 'error' });
     }
   };
 
-  // --- GIAO DIỆN (JSX) ---
   return (
     <div>
       {notification && (
@@ -92,36 +96,28 @@ const DangKyPage = () => {
         
         <div className="form-group">
           <label className="form-label">Chọn học viên:</label>
-          <select 
-            value={selectedHocVien} 
-            onChange={(e) => setSelectedHocVien(e.target.value)}
-            className="form-select"
-            required
-          >
-            <option value="">-- Chọn học viên --</option>
-            {hocVienList.map((hv) => (
-              <option key={hv.ma_hoc_vien} value={hv.ma_hoc_vien}>
-                {hv.ho_ten} ({hv.ma_hoc_vien})
-              </option>
-            ))}
-          </select>
+          <Select
+            options={hocVienOptions}
+            value={hocVienOptions.find(opt => opt.value === selectedHocVien)}
+            onChange={(opt) => setSelectedHocVien(opt ? opt.value : '')}
+            placeholder="-- Chọn hoặc tìm kiếm học viên --"
+            isClearable
+            isSearchable
+            maxMenuHeight={200}
+          />
         </div>
 
         <div className="form-group">
           <label className="form-label">Chọn khóa học:</label>
-          <select 
-            value={selectedKhoaHoc} 
-            onChange={(e) => setSelectedKhoaHoc(e.target.value)}
-            className="form-select"
-            required
-          >
-            <option value="">-- Chọn khóa học --</option>
-            {khoaHocList.map((kh) => (
-              <option key={kh.ma_khoa_hoc} value={kh.ma_khoa_hoc}>
-                {kh.ten_khoa} ({kh.ma_khoa_hoc})
-              </option>
-            ))}
-          </select>
+          <Select
+            options={khoaHocOptions}
+            value={khoaHocOptions.find(opt => opt.value === selectedKhoaHoc)}
+            onChange={(opt) => setSelectedKhoaHoc(opt ? opt.value : '')}
+            placeholder="-- Chọn hoặc tìm kiếm khóa học --"
+            isClearable
+            isSearchable
+            maxMenuHeight={200}
+          />
         </div>
 
         <button type="submit" className="form-button">Đăng ký</button>
