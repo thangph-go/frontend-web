@@ -68,9 +68,7 @@
 .qltk-modal-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
   border-bottom: 1px solid #eeeeee;
-  padding-bottom: 5px;
 }
 
 .qltk-close-btn {
@@ -84,7 +82,7 @@
 /* Form */
 .qltk-form {
   display: grid;
-  gap: 15px;
+  gap: 0;
 }
 
 /* Footer */

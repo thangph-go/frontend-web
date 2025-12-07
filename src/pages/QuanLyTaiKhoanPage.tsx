@@ -183,6 +183,9 @@ const QuanLyTaiKhoanPage = () => {
                 <label className="form-label">Tên đăng nhập 
                   <span style={{color: '#CC3300'}}>*</span>
                 </label>
+                <i style={{color: '#CC3300'}}>
+                  Tên đăng nhập phải có ít nhất 3 ký tự và không chứa khoảng trắng
+                </i>
                 <input 
                   required 
                   name="ten_dang_nhap"
@@ -197,6 +200,9 @@ const QuanLyTaiKhoanPage = () => {
                 <label className="form-label">Mật khẩu 
                   <span style={{color: '#CC3300'}}>*</span>
                 </label>
+                <i style={{color: '#CC3300'}}>
+                  Mật khẩu phải có ít nhất 6 ký tự, gồm: chữ hoa, chữ thường, số và ký tự đặc biệt
+                </i>
                 <input 
                   required 
                   type="password"
