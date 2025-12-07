@@ -202,6 +202,7 @@ const QuanLyTaiKhoanPage = () => {
                 </label>
                 <i style={{color: '#CC3300'}}>
                   Mật khẩu phải có ít nhất 6 ký tự, gồm: chữ hoa, chữ thường, số và ký tự đặc biệt
+                  (!@#$%^&*(),.?":{}|<> </>)
                 </i>
                 <input 
                   required 
