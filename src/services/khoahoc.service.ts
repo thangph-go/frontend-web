@@ -1,11 +1,5 @@
-// File: src/services/khoahoc.service.ts
 import apiClient from './api';
 
-// ==========================================
-// 1. CÁC INTERFACE (KIỂU DỮ LIỆU)
-// ==========================================
-
-// Kiểu dữ liệu cho Khóa Học
 export interface KhoaHoc {
   ma_khoa_hoc: string;
   ten_khoa: string;
@@ -15,7 +9,6 @@ export interface KhoaHoc {
   deleted_at: string | null;
 }
 
-// Kiểu dữ liệu cho Form nhập liệu Khóa Học
 export type KhoaHocFormData = {
   ma_khoa_hoc: string;
   ten_khoa: string;
@@ -24,23 +17,15 @@ export type KhoaHocFormData = {
   thoi_gian_ket_thuc: string;
 };
 
-// Kiểu dữ liệu cho Nội dung/Chương của khóa học
 export interface NoiDungKhoaHoc {
   id: number;
   ma_khoa_hoc: string;
   ten_noi_dung: string;
   mo_ta: string;
   thu_tu: number;
-  // Trường này có thể null nếu chỉ lấy danh sách chung, 
-  // nhưng sẽ có giá trị khi gọi API xem tiến độ của học viên
   trang_thai?: 'HOÀN THÀNH' | 'CHƯA HOÀN THÀNH'; 
 }
 
-// ==========================================
-// 2. CÁC API QUẢN LÝ KHÓA HỌC (CRUD CƠ BẢN)
-// ==========================================
-
-// Lấy tất cả khóa học
 export const getAllKhoaHoc = async () => {
   try {
     const response = await apiClient.get<KhoaHoc[]>('/khoahoc');
@@ -50,7 +35,6 @@ export const getAllKhoaHoc = async () => {
   }
 };
 
-// Lấy chi tiết 1 khóa học
 export const getKhoaHocById = async (ma_kh: string) => {
   try {
     const response = await apiClient.get<KhoaHoc>(`/khoahoc/${ma_kh}`);
@@ -60,7 +44,6 @@ export const getKhoaHocById = async (ma_kh: string) => {
   }
 };
 
-// Tạo khóa học mới
 export const createKhoaHoc = async (data: KhoaHocFormData) => {
   try {
     const response = await apiClient.post('/khoahoc', data);
@@ -70,7 +53,6 @@ export const createKhoaHoc = async (data: KhoaHocFormData) => {
   }
 };
 
-// Cập nhật khóa học
 export const updateKhoaHoc = async (ma_kh: string, data: KhoaHocFormData) => {
   try {
     const response = await apiClient.put(`/khoahoc/${ma_kh}`, data);
@@ -80,7 +62,6 @@ export const updateKhoaHoc = async (ma_kh: string, data: KhoaHocFormData) => {
   }
 };
 
-// Xóa (mềm) khóa học
 export const deleteKhoaHoc = async (ma_kh: string) => {
   try {
     const response = await apiClient.delete(`/khoahoc/${ma_kh}`);
@@ -90,11 +71,6 @@ export const deleteKhoaHoc = async (ma_kh: string) => {
   }
 };
 
-// ==========================================
-// 3. CÁC API QUẢN LÝ NỘI DUNG & TIẾN ĐỘ (MỚI)
-// ==========================================
-
-// Lấy danh sách các chương/bài học của 1 khóa (Dùng cho admin quản lý nội dung)
 export const getCourseModules = async (ma_kh: string) => {
   try {
     const response = await apiClient.get<NoiDungKhoaHoc[]>(`/khoahoc/${ma_kh}/noidung`);
@@ -104,7 +80,6 @@ export const getCourseModules = async (ma_kh: string) => {
   }
 };
 
-// Thêm một chương/bài học mới vào khóa
 export const addCourseModule = async (ma_kh: string, data: { ten_noi_dung: string, mo_ta?: string, thu_tu?: number }) => {
   try {
     const response = await apiClient.post(`/khoahoc/${ma_kh}/noidung`, data);
@@ -114,7 +89,6 @@ export const addCourseModule = async (ma_kh: string, data: { ten_noi_dung: strin
   }
 };
 
-// Xóa một chương/bài học
 export const deleteCourseModule = async (id_noi_dung: number) => {
   try {
     const response = await apiClient.delete(`/khoahoc/noidung/${id_noi_dung}`);
@@ -124,11 +98,8 @@ export const deleteCourseModule = async (id_noi_dung: number) => {
   }
 };
 
-// (QUAN TRỌNG) Lấy danh sách bài học KÈM THEO trạng thái của học viên
-// Dùng để hiển thị trong Modal Checklist
 export const getStudentProgress = async (ma_kh: string, ma_hv: string) => {
   try {
-    // Gọi API: /api/khoahoc/tiendo?ma_khoa_hoc=...&ma_hoc_vien=...
     const response = await apiClient.get<NoiDungKhoaHoc[]>('/khoahoc/tiendo', {
       params: { ma_khoa_hoc: ma_kh, ma_hoc_vien: ma_hv }
     });
@@ -138,7 +109,6 @@ export const getStudentProgress = async (ma_kh: string, ma_hv: string) => {
   }
 };
 
-// (QUAN TRỌNG) Cập nhật trạng thái checkbox (Hoàn thành / Chưa hoàn thành)
 export const updateStudentProgress = async (data: { 
   ma_hoc_vien: string, 
   id_noi_dung: number, 
@@ -152,9 +122,6 @@ export const updateStudentProgress = async (data: {
   }
 };
 
-// ... (các hàm cũ) ...
-
-// [MỚI] Cập nhật nội dung chương học
 export const updateCourseModule = async (id_noi_dung: number, data: { ten_noi_dung: string, mo_ta?: string, thu_tu?: number }) => {
   try {
     const response = await apiClient.put(`/khoahoc/noidung/${id_noi_dung}`, data);
