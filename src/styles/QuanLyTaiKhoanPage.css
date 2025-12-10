@@ -1,16 +1,13 @@
-/* Container */
 .qltk-container {
   padding: 20px;
 }
 
-/* Title */
 .qltk-title {
   color: #2c3e50;
   border-left: 5px solid #3498db;
   padding-left: 10px;
 }
 
-/* Header area */
 .qltk-header {
   margin: 20px 0;
   display: flex;
@@ -22,13 +19,11 @@
   margin: 0;
 }
 
-/* Divider */
 .qltk-divider {
   border-top: 2px solid #dddddd;
   margin-bottom: 20px;
 }
 
-/* Add button */
 .qltk-add-btn {
   background-color: #27ae60 !important;
   display: flex;
@@ -36,13 +31,11 @@
   gap: 8px;
 }
 
-/* Center cell */
 .qltk-center {
   text-align: center;
   padding: 20px;
 }
 
-/* Modal */
 .qltk-modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -64,7 +57,6 @@
   animation: fadeIn 0.2s ease;
 }
 
-/* Header of modal */
 .qltk-modal-header {
   display: flex;
   justify-content: space-between;
@@ -79,13 +71,11 @@
   color: #999999;
 }
 
-/* Form */
 .qltk-form {
   display: grid;
   gap: 0;
 }
 
-/* Footer */
 .qltk-form-footer {
   margin-top: 10px;
   display: flex;
@@ -98,7 +88,6 @@
   min-width: 120px;
 }
 
-/* Animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to   { opacity: 1; transform: translateY(0); }

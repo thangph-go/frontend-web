@@ -1,6 +1,3 @@
-/* File: src/styles/forms.css */
-
-/* Định dạng chung cho các ô input và select */
 .form-input,
 .form-select,
 .form-textarea {
@@ -14,14 +11,12 @@
   font-size: 1rem;
 }
 
-/* Định dạng cho các nhãn (label) */
 .form-label {
   font-weight: bold;
   display: block;
   margin: 10px 0;
 }
 
-/* Định dạng cho các nút bấm (button) */
 .form-button {
   background-color: #007bff;
   color: white;
@@ -38,7 +33,6 @@
   background-color: #0056b3;
 }
 
-/* Nút "Hủy" (màu xám) */
 .form-button-secondary {
   background-color: #6c757d;
 }
@@ -47,7 +41,6 @@
   background-color: #5a6268;
 }
 
-/* Định dạng cho toàn bộ cái form (Thêm khoảng cách) */
 .form-container {
   background-color: #f9f9f9;
   border: 3px solid #CCCCCC;
@@ -56,7 +49,6 @@
   margin-bottom: 20px;
 }
 
-/* Định dạng cho một nhóm (label + input) */
 .form-group {
   margin-bottom: 15px;
 }
@@ -68,12 +60,10 @@
   margin-bottom: 20px;
 }
 
-/* 2. Định dạng cho riêng form tìm kiếm */
 .search-form {
   display: flex;
 }
 
-/* Tùy chỉnh nhỏ cho ô input tìm kiếm */
 .search-input {
   width: 300px;
   margin-right: 10px;

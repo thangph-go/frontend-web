@@ -1,4 +1,3 @@
-// File: src/components/layout/AdminLayout.tsx
 import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import '../../styles/AdminLayout.css';
@@ -29,7 +28,6 @@ const AdminLayout = () => {
     navigate('/login');
   };
 
-  // --- Kiểm tra highlight menu cha ---
   const thongKeChildPaths = [
     "/admin/thongke/que-quan",
     "/admin/thongke/thuong-tru",
@@ -39,7 +37,7 @@ const AdminLayout = () => {
 
   return (
     <div className="admin-layout">
-      {/* SIDEBAR */}
+
       <nav className="sidebar">
         <div className="sidebar-header">
           <img src="/logo_quan_ly_trung_tam.png" alt="Logo" className="sidebar-logo" />
@@ -63,7 +61,6 @@ const AdminLayout = () => {
                 </NavLink>
               </li>
 
-              {/* Menu cha Báo cáo thống kê */}
               <li>
                 <div 
                   className={`sidebar-dropdown-toggle ${isThongKeActive ? 'active' : ''}`} 
@@ -76,7 +73,6 @@ const AdminLayout = () => {
                   <i className={`fas fa-chevron-right arrow ${isThongKeOpen ? 'rotate' : ''}`}></i>
                 </div>
 
-                {/* Menu con: mở/đóng theo click */}
                 {isThongKeOpen && (
                   <ul className="sidebar-submenu">
                     <li>
@@ -135,7 +131,6 @@ const AdminLayout = () => {
         </ul>
       </nav>
 
-      {/* NỘI DUNG CHÍNH */}
       <div className="main-content">
         <header className="header">
           <div className="welcome-message">

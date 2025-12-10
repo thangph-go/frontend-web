@@ -180,7 +180,6 @@ const HocVienPage = () => {
     }
   };
 
-  // --- GIAO DIỆN (JSX) ---
   return (
     <div>
       {notification && (

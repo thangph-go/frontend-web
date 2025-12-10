@@ -39,7 +39,6 @@ const LoginPage = () => {
     }catch (err: any) {
   setError(err.message);
 
-  // Giữ thông báo lỗi 4 giây rồi mới tắt
   setTimeout(() => {
     setError(null);
   }, 4000);

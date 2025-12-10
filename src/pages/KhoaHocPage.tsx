@@ -210,7 +210,6 @@ const KhoaHocPage = () => {
         </form>
       )}
 
-      {/* Danh sách Khóa học (Bảng) */}
       <hr style={{border: 'none', borderTop: '1px solid #eee', margin: '20px 0'}} />
       <h3>Danh sách khóa học</h3>
 

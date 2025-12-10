@@ -1,4 +1,3 @@
-// File: src/components/course/CourseContentManager.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   getCourseModules, 
@@ -8,7 +7,6 @@ import {
   NoiDungKhoaHoc 
 } from '../../services/khoahoc.service';
 
-// 1. Import Notification Component
 import Notification from '../notification/Notification';
 import "../../styles/forms.css"
 import "../../styles/tables.css"
@@ -21,19 +19,16 @@ const CourseContentManager: React.FC<Props> = ({ maKhoaHoc }) => {
   const [modules, setModules] = useState<NoiDungKhoaHoc[]>([]);
   const [loading, setLoading] = useState(false);
   
-  // State cho Form
   const [tenNoiDung, setTenNoiDung] = useState('');
   const [moTa, setMoTa] = useState('');
   const [thuTu, setThuTu] = useState(1);
   const [editingId, setEditingId] = useState<number | null>(null);
 
-  // 2. State quản lý thông báo Popup
   const [notification, setNotification] = useState<{
     message: string;
     type: 'success' | 'error';
   } | null>(null);
 
-// --- 2. SỬA HÀM fetchData DÙNG useCallback ---
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
@@ -45,14 +40,11 @@ const CourseContentManager: React.FC<Props> = ({ maKhoaHoc }) => {
     } finally {
       setLoading(false);
     }
-  }, [maKhoaHoc]); // Chỉ tạo lại hàm khi maKhoaHoc thay đổi
-  // ---------------------------------------------
+  }, [maKhoaHoc]);
 
-  // --- 3. SỬA USE EFFECT ---
   useEffect(() => {
     fetchData();
-  }, [fetchData]); // Bây giờ an toàn để đưa fetchData vào đây
-  // -------------------------
+  }, [fetchData]);
 
   const resetForm = () => {
     setTenNoiDung('');
@@ -63,15 +55,13 @@ const CourseContentManager: React.FC<Props> = ({ maKhoaHoc }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setNotification(null); // Reset thông báo cũ
+    setNotification(null);
 
-    // Validate dữ liệu
     if (!tenNoiDung.trim()) {
       setNotification({ message: "Vui lòng nhập tên nội dung!", type: 'error' });
       return;
     }
 
-    // Kiểm tra trùng lặp thứ tự
     const isDuplicate = modules.some(m => m.thu_tu === thuTu && m.id !== editingId);
     if (isDuplicate) {
       setNotification({ message: `Thứ tự số ${thuTu} đã tồn tại! Vui lòng chọn số khác.`, type: 'error' });
@@ -80,16 +70,13 @@ const CourseContentManager: React.FC<Props> = ({ maKhoaHoc }) => {
 
     try {
       if (editingId) {
-        // --- Cập nhật ---
         await updateCourseModule(editingId, {
           ten_noi_dung: tenNoiDung,
           mo_ta: moTa,
           thu_tu: thuTu
         });
-        // 3. Hiển thị Popup thành công thay vì alert
         setNotification({ message: "Cập nhật nội dung thành công!", type: 'success' });
       } else {
-        // --- Thêm mới ---
         await addCourseModule(maKhoaHoc, {
           ten_noi_dung: tenNoiDung,
           mo_ta: moTa,
@@ -99,14 +86,13 @@ const CourseContentManager: React.FC<Props> = ({ maKhoaHoc }) => {
       }
       
       resetForm();
-      fetchData(); // Tải lại danh sách
+      fetchData();
     } catch (error: any) {
       setNotification({ message: error.message || "Có lỗi xảy ra", type: 'error' });
     }
   };
 
   const handleDelete = async (id: number) => {
-    // Với thao tác Xóa quan trọng, vẫn nên giữ confirm của trình duyệt hoặc dùng Modal riêng
     if(!window.confirm("Bạn có chắc chắn muốn xóa nội dung này không?")) return;
     
     try {
@@ -130,7 +116,6 @@ const CourseContentManager: React.FC<Props> = ({ maKhoaHoc }) => {
   return (
     <div style={{ marginTop: '20px', position: 'relative' }}>
       
-      {/* 4. Hiển thị Component Notification ở đây */}
       {notification && (
         <Notification
           message={notification.message}
@@ -139,7 +124,6 @@ const CourseContentManager: React.FC<Props> = ({ maKhoaHoc }) => {
         />
       )}
 
-      {/* --- FORM NHẬP LIỆU --- */}
       <div style={{ background: '#f0f4f8', padding: '20px', borderRadius: '8px', marginBottom: '30px' }}>
         <h4 style={{ marginTop: 0, color: '#2c3e50' }}>
           {editingId ? 'Chỉnh sửa nội dung' : 'Thêm nội dung mới'}
@@ -165,7 +149,6 @@ const CourseContentManager: React.FC<Props> = ({ maKhoaHoc }) => {
                 placeholder="Ví dụ: Chương 1 - Giới thiệu"
                 value={tenNoiDung}
                 onChange={(e) => setTenNoiDung(e.target.value)}
-                // Bỏ required mặc định để tự xử lý validation hiển thị popup
               />
             </div>
           </div>
@@ -202,7 +185,6 @@ const CourseContentManager: React.FC<Props> = ({ maKhoaHoc }) => {
         </form>
       </div>
 
-      {/* --- DANH SÁCH HIỂN THỊ --- */}
       {loading ? <p>Đang tải...</p> : (
         <table className="styled-table" style={{ wordWrap: 'break-word', whiteSpace: 'normal' }}>
           <thead>
